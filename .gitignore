@@ -1,0 +1,8 @@
+# key file
+*.pem
+
+# plaintext
+plaintext
+
+# ciphertext
+encrypted_data.bin
