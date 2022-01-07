@@ -25,12 +25,13 @@ def encrypt(mode):
     else:
         message, signature = PSS_sign(plaintext, privatekey)
         ciphertext = OAEP_encrypt(message, publickey)
-        encsignature = OAEP_encrypt(signature, publickey)
-
+        signature1 = OAEP_encrypt(signature[:128], publickey)
+        signature2 = OAEP_encrypt(signature[128:], publickey)
         # 將加密結果寫入檔案
         with open("encrypted_data.bin", "wb") as f:
+            f.write(signature1)
+            f.write(signature2)
             f.write(ciphertext)
-            f.write(encsignature)
 
     print()
     print('end encrypt')

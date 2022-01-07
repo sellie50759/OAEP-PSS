@@ -6,3 +6,5 @@ plaintext
 
 # ciphertext
 encrypted_data.bin
+# decrypt_text
+text

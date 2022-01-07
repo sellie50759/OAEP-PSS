@@ -18,17 +18,10 @@ def decrypt(mode):
         PSS_verify(message, signature, publickey)
         plaintext = OAEP_decrypt(message, privatekey)
     else:
-        pass
-        '''
-        message, signature = PSS_sign(plaintext, privatekey)
-        ciphertext = OAEP_encrypt(message, publickey)
-        encsignature = OAEP_encrypt(signature, publickey)
-
-        # 將加密結果寫入檔案
-        with open("encrypted_data.bin", "wb") as f:
-            f.write(ciphertext)
-            f.write(encsignature)
-        '''
+        ciphertext, signature1, signature2 = read_ciphertext(mode)
+        plaintext = OAEP_decrypt(ciphertext, privatekey)
+        signature = OAEP_decrypt(signature1, privatekey) + OAEP_decrypt(signature2, privatekey)
+        PSS_verify(plaintext, signature, publickey)
 
     # 輸出解密後的資料
     with open("text", "wb") as f:
@@ -51,7 +44,12 @@ def read_ciphertext(mode):
             sign = f.read(256)
             message = f.read()
         return message, sign
-    return None
+    else:
+        with open("encrypted_data.bin", "rb") as f:
+            sign1 = f.read(256)
+            sign2 = f.read(256)
+            message = f.read()
+        return message, sign1, sign2
 
 
 def OAEP_decrypt(message, prikey):
