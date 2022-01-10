@@ -20,19 +20,41 @@ def validate(f):
         return False
 
 
-if __name__ == "__main__":
+def decryptedtext_equal_plaintext():
+    with open("plaintext", 'rb') as f:
+        plaintext = f.read()
+    with open("text", 'rb') as f:
+        decryptedtext = f.read()
+
+    if plaintext == decryptedtext:
+        return True
+    else:
+        return False
+
+
+def main():
     if not key_exist():
         gen_AB_key()
-    mode = input("please input your mode:\n" +
-                 "0 is encrypt first\n" +
-                 "1 is sign first\n")
 
+    message = "please input your mode:\n" + \
+              "0 is encrypt first\n" + \
+              "1 is sign first\n"
+
+    mode = input(message)
     while not validate(mode):
-        mode = input("please input your mode:\n" +
-                     "0 is encrypt first\n" +
-                     "1 is sign first\n")
+        mode = input(message)
+
     encrypt(mode)
     decrypt(mode)
+
+    if decryptedtext_equal_plaintext():
+        print("sign and encrypt success.")
+    else:
+        print("sign and encrypt fail!")
+
+
+if __name__ == "__main__":
+    main()
 
 '''
 reference
